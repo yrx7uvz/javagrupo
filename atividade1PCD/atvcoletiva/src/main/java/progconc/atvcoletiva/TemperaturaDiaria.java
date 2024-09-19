@@ -46,15 +46,6 @@ public class TemperaturaDiaria {
     public double gettemperatura(){
         return temperatura;
     }
-
-    @Override
-
-    public String toString() {
-        return "Cidade: " + cidade + ", País: " + pais + ", Data: " + dia + "/" + mes + "/" + ano + " , Temperatura: " + temperatura;
-    }
-
-
-
-    
+ 
 }
 
