@@ -14,7 +14,7 @@ import java.util.Map;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
-public class threads2 {
+public class experimento2 {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis(); // Captura o tempo inicial
@@ -69,7 +69,7 @@ public class threads2 {
         long executionTime = endTime - startTime;  // Calcula o tempo total
 
         // Salvar o tempo de execução em um arquivo txt
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("tempo_execucao_threads.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("tempo_execucao_experimento.txt"))) {
             writer.write("Tempo de execução com threads (ms): " + executionTime);
             System.out.println("Tempo de execução salvo no arquivo: tempo_execucao_threads.txt");
         } catch (IOException e) {

@@ -1,5 +1,4 @@
 #ignora pasta vscode
 .vscode/
 #igonora arquivo gerado pós execução
-*tempo_execucao.txt
-*tempo_execucao_threads.txt
+*.txt
