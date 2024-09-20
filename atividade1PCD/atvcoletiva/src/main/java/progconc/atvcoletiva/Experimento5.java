@@ -14,7 +14,7 @@ import java.util.Map;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
-public class Experimento4 {
+public class Experimento5 {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis(); // Captura o tempo inicial
@@ -28,60 +28,34 @@ public class Experimento4 {
             return;
         }
 
-        // Divide a lista de arquivos em oito partes para serem processadas por cada thread
-        File[] firstPartFiles = new File[40];
-        File[] secondPartFiles = new File[40];
-        File[] thirdPartFiles = new File[40];
-        File[] fourthPartFiles = new File[40];
-        File[] fifthPartFiles = new File[40];
-        File[] sixthPartFiles = new File[40];
-        File[] seventhPartFiles = new File[40];
-        File[] eighthPartFiles = new File[40];
-
-        System.arraycopy(listOfFiles, 0, firstPartFiles, 0, 40);
-        System.arraycopy(listOfFiles, 40, secondPartFiles, 0, 40);
-        System.arraycopy(listOfFiles, 80, thirdPartFiles, 0, 40);
-        System.arraycopy(listOfFiles, 120, fourthPartFiles, 0, 40);
-        System.arraycopy(listOfFiles, 160, fifthPartFiles, 0, 40);
-        System.arraycopy(listOfFiles, 200, sixthPartFiles, 0, 40);
-        System.arraycopy(listOfFiles, 240, seventhPartFiles, 0, 40);
-        System.arraycopy(listOfFiles, 280, eighthPartFiles, 0, 40);
+        // Divide a lista de arquivos em 16 partes para serem processadas por cada thread (20 arquivos por thread)
+        File[][] fileParts = new File[16][20];
+        for (int i = 0; i < 16; i++) {
+            System.arraycopy(listOfFiles, i * 20, fileParts[i], 0, 20);
+        }
 
         // Lista compartilhada para armazenar todas as leituras de temperatura diárias
         List<TemperaturaDiaria> listaDeTemperaturas = Collections.synchronizedList(new ArrayList<>());
 
-        // Cria oito threads, cada uma processando uma parte dos arquivos
-        Thread thread1 = new Thread(() -> processFiles(firstPartFiles, listaDeTemperaturas));
-        Thread thread2 = new Thread(() -> processFiles(secondPartFiles, listaDeTemperaturas));
-        Thread thread3 = new Thread(() -> processFiles(thirdPartFiles, listaDeTemperaturas));
-        Thread thread4 = new Thread(() -> processFiles(fourthPartFiles, listaDeTemperaturas));
-        Thread thread5 = new Thread(() -> processFiles(fifthPartFiles, listaDeTemperaturas));
-        Thread thread6 = new Thread(() -> processFiles(sixthPartFiles, listaDeTemperaturas));
-        Thread thread7 = new Thread(() -> processFiles(seventhPartFiles, listaDeTemperaturas));
-        Thread thread8 = new Thread(() -> processFiles(eighthPartFiles, listaDeTemperaturas));
+        // Cria 16 threads, cada uma processando uma parte dos arquivos
+        Thread[] threads = new Thread[16];
+        for (int i = 0; i < 16; i++) {
+            final int index = i;
+            threads[i] = new Thread(() -> processFiles(fileParts[index], listaDeTemperaturas));
+        }
 
         // Inicia as threads
-        thread1.start();
-        thread2.start();
-        thread3.start();
-        thread4.start();
-        thread5.start();
-        thread6.start();
-        thread7.start();
-        thread8.start();
+        for (Thread thread : threads) {
+            thread.start();
+        }
 
-        try {
-            // Aguarda as threads terminarem
-            thread1.join();
-            thread2.join();
-            thread3.join();
-            thread4.join();
-            thread5.join();
-            thread6.join();
-            thread7.join();
-            thread8.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        // Aguarda as threads terminarem
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         // Processa as temperaturas após a leitura de todos os arquivos
@@ -95,9 +69,9 @@ public class Experimento4 {
         long executionTime = endTime - startTime;  // Calcula o tempo total
 
         // Salvar o tempo de execução em um arquivo txt
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("tempo_execucao_threads8.txt"))) {
-            writer.write("Tempo de execução com 8 threads (ms): " + executionTime);
-            System.out.println("Tempo de execução salvo no arquivo: tempo_execucao_threads8.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("tempo_execucao_experimento5.txt"))) {
+            writer.write("Tempo de execução com 16 threads (ms): " + executionTime);
+            System.out.println("Tempo de execução salvo no arquivo: tempo_execucao_experimento5.txt");
         } catch (IOException e) {
             System.err.println("Erro ao salvar o arquivo: " + e.getMessage());
         }

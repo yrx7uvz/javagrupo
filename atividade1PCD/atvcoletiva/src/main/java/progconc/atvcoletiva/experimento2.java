@@ -14,7 +14,7 @@ import java.util.Map;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
-public class experimento2 {
+public class Experimento2 {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis(); // Captura o tempo inicial
