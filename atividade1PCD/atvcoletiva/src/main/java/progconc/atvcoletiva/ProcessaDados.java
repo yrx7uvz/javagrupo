@@ -1,5 +1,6 @@
 package progconc.atvcoletiva;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,19 @@ public class ProcessaDados {
             }
         }
     }
+
+    public Map<Integer, List<TemperaturaDiaria>> agruparPorAno(List<TemperaturaDiaria> temperaturas) {
+    Map<Integer, List<TemperaturaDiaria>> mapaPorAno = new HashMap<>();
+    for (TemperaturaDiaria temp : temperaturas) {
+        mapaPorAno.computeIfAbsent(temp.getano(), k -> new ArrayList<>()).add(temp);
+    }
+    return mapaPorAno;
+}
+
+public void processarDados(List<TemperaturaDiaria> temperaturasDoAno) {
+    // Lógica para calcular média, máxima e mínima
+    // Armazenar os resultados em uma estrutura apropriada
+}
 
     // Método para obter as estatísticas mensais
     public Map<String, Map<Integer, Map<Integer, TemperaturaMensal>>> getmonthlyStats() {
