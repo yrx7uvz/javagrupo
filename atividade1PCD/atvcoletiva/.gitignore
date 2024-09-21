@@ -1,2 +1,4 @@
-#ignore pasta .vs code
+#ignora pasta vscode
 .vscode/
+#igonora arquivo gerado pós execução
+*.txt
